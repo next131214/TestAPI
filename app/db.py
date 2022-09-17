@@ -1,11 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
+import os
 
-host = "db:3306"
-db_name = "db"
-user = "docker"
-password = "docker"
+host = os.environ.get("MYSQL_HOST")+":3306"
+db_name = os.environ.get("MYSQL_DATABASE")
+user = os.environ.get("MYSQL_USER")
+password = os.environ.get("MYSQL_PASSWORD")
 
 DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8' % (
     user,
