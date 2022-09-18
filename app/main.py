@@ -22,8 +22,8 @@ def auth_request(token: str = Depends(oauth2_scheme)):
 # test
 @app.get("/")
 def rootTest(authentication: bool = Depends(auth_request)):
-    if authentication != True:
-        return authentication
+    # if authentication != True:
+    #     return authentication
     return {"test": "OK!"}
 
 
@@ -53,7 +53,7 @@ def post_table1(val: Table1, authentication: bool = Depends(auth_request)):
     if authentication == False:
         return HTTPException(status_code=401, detail="authentication_error")
     insert = Table1Table(authentication_id=authentication, col1=val.col1, col2=val.col2,
-                         col3=val.col3, create_date=datetime.datetime.now(pytz.timezone('Asia/Tokyo')))
+                         col3=val.col3, create_date=now)
     result = session.add(insert)
     session.commit()
     return "OK"
@@ -69,7 +69,7 @@ def put_table1(val: Table1, authentication: bool = Depends(auth_request)):
         target.col1 = val.col1
         target.col2 = val.col2
         target.col3 = val.col3
-        target.update_date = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
+        target.update_date = now
         session.commit()
         return "OK"
     else:
@@ -83,7 +83,7 @@ def delete_table1(val: Table1, authentication: bool = Depends(auth_request)):
     target = session.query(Table1Table).\
         filter(Table1Table.id == val.id, Table1Table.delete_date == None).first()
     if target:
-        target.delete_date = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
+        target.delete_date = now
         session.commit()
         return "OK"
     else:
